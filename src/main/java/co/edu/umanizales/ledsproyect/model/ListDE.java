@@ -2,6 +2,7 @@ package co.edu.umanizales.ledsproyect.model;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,5 +43,19 @@ public class ListDE {
         }
         return leds;
     }
+
+    public void reiniciar(){
+        NodeDE temp = head;
+        while (temp != null){
+            temp.getData().setState(false);
+            temp.getData().setDateOff(null);
+            temp.getData().setDateOn(null);
+
+            temp = temp.getNext();
+        }
+
+    }
+
+
 
 }

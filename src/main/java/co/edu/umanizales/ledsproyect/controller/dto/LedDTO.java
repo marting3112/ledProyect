@@ -10,6 +10,5 @@ import java.time.LocalTime;
 
 public class LedDTO {
     private int id;
-    private boolean state;
 
 }

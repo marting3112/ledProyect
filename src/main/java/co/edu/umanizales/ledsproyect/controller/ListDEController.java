@@ -26,8 +26,20 @@ public class ListDEController {
 
     @PostMapping(path = "/add/{id}")
     public ResponseEntity<ResponseDTO> addLed(@PathVariable int id){
+
+        listDEService.getLeds().addLed(new Led(id,false));
         return new ResponseEntity<>(new ResponseDTO(
                 200, "la bombilla fue añadida", null), HttpStatus.OK);
+
+    }
+
+
+    @GetMapping(path = "/reiniciar")
+    public ResponseEntity<ResponseDTO> reiniciar(){
+
+        listDEService.getLeds().reiniciar();
+        return new ResponseEntity<>(new ResponseDTO(
+                200, "la bombillas reiniciaron su estado", null), HttpStatus.OK);
 
     }
 
