@@ -63,16 +63,11 @@ public class ListDEController {
     }
 
     @GetMapping(path = "/turnonlight")
-    public ResponseEntity<ResponseDTO> turnOnLight(){
-        try{
-            listDEService.getLeds().turnOnLight();
-        }catch (InterruptedException e){
-            throw new RuntimeException(e);
-        }
+    public ResponseEntity<ResponseDTO> turnOnLight() {
+
+        listDEService.getLeds().turnOnLight();
+
         return new ResponseEntity<>(new ResponseDTO(
-                200, "Se realizo el encendido de las luces", null), HttpStatus.OK);
-
+                200, "se encendieron las luces", null), HttpStatus.OK);
     }
-
-
 }

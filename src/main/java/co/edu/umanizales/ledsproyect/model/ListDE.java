@@ -1,5 +1,6 @@
 package co.edu.umanizales.ledsproyect.model;
 
+import co.edu.umanizales.ledsproyect.excepcion.ListDEExcepcion;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -16,9 +17,6 @@ public class ListDE {
     private List<Led> leds = new ArrayList<>();
 
     public void addLed(Led led) {
-
-        int size = 0;
-
         if (head == null) {
             head = new NodeDE(led);
         } else {
@@ -80,72 +78,97 @@ public class ListDE {
         size++;
     }
 
-    public void turnOnLight() throws InterruptedException {
-        if (size % 2 == 0){
-            int medium = (size/2);
+    public  void turnOnLight(){
+        if (head != null) {
             NodeDE temp = head;
             int pasos = 1;
+            int medium;
+            if ((size%2)!=0){
+                medium = (size / 2) + 1;
+                while (temp!= null){
 
-            while (temp != null){
-                if (pasos == (medium + 1)){
-                    temp.getData().setState(true);
-                    temp.getData().setDateOn(LocalTime.from(LocalDateTime.now()));
-
-                    NodeDE temp2 = temp.getPrev();
-                    temp2.getData().setState(true);
-                    temp2.getData().setDateOn(LocalTime.from(LocalDateTime.now()));
-
-                    if (temp.getNext() != null){
-                        while (temp.getNext() != null){
-                            Thread.sleep(1000);
-                            temp.getData().setState(false);
-                            temp.getData().setDateOff(LocalTime.from(LocalDateTime.now()));
-
-                            temp2.getData().setState(false);
-                            temp2.getData().setDateOff(LocalTime.from(LocalDateTime.now()));
-
-                            temp = temp.getNext();
-                            temp.getData().setState(true);
-                            temp.getData().setDateOn(LocalTime.from(LocalDateTime.now()));
-
-                            temp2 = temp.getNext();
-                            temp2.getData().setState(true);
-                            temp2.getData().setDateOn(LocalTime.from(LocalDateTime.now()));
-                        }
-                    }
-                }
-                pasos ++;
-                temp = temp.getNext();
-            }
-        }else{
-            int medium = (size/2)+1;
-            NodeDE temp = head;
-            int pasos = 1;
-            while (temp != null){
-                if (pasos == medium){
-                    temp.getData().setState(true);
-                    temp.getData().setDateOn(LocalTime.from(LocalDateTime.now()));
-                    NodeDE temp2 = temp;
-                    if (temp.getNext() != null){
-                        Thread.sleep(1000);
-                        temp.getData().setState(false);
-                        temp.getData().setDateOff(LocalTime.from(LocalDateTime.now()));
-
-                        temp2.getData().setState(false);
-                        temp2.getData().setDateOff(LocalTime.from(LocalDateTime.now()));
-
-                        temp = temp.getNext();
+                    if (pasos == medium){
+                        NodeDE tempNext = temp;
                         temp.getData().setState(true);
                         temp.getData().setDateOn(LocalTime.from(LocalDateTime.now()));
 
-                        temp2 = temp.getNext();
-                        temp2.getData().setState(true);
-                        temp2.getData().setDateOn(LocalTime.from(LocalDateTime.now()));
+                        while (tempNext.getNext() != null){
+
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
+                            temp.getData().setState(false);
+                            temp.getData().setDateOff(LocalTime.from(LocalDateTime.now()));
+                            tempNext.getData().setState(false);
+                            tempNext.getData().setDateOff(LocalTime.from(LocalDateTime.now()));
+
+                            temp = temp.getPrev();
+                            tempNext= tempNext.getNext();
+
+                            temp.getData().setState(true);
+                            temp.getData().setDateOn(LocalTime.from(LocalDateTime.now()));
+                            tempNext.getData().setState(true);
+                            tempNext.getData().setDateOn(LocalTime.from(LocalDateTime.now()));
+
+
+
+                        }
                     }
+                    pasos++;
+                    temp= temp.getNext();
+
+
                 }
+
+
+
+
+            } else{
+                medium = size/2;
+
+                while (temp!= null){
+                    if (pasos == medium){
+                        NodeDE tempNext = temp.getNext();
+                        temp.getData().setState(true);
+                        temp.getData().setDateOn(LocalTime.from(LocalDateTime.now()));
+                        tempNext.getData().setState(true);
+                        tempNext.getData().setDateOn(LocalTime.from(LocalDateTime.now()));
+
+                        while (tempNext.getNext() != null) {
+
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
+                            temp.getData().setState(false);
+                            temp.getData().setDateOff(LocalTime.from(LocalDateTime.now()));
+                            tempNext.getData().setState(false);
+                            tempNext.getData().setDateOff(LocalTime.from(LocalDateTime.now()));
+
+                            temp = temp.getPrev();
+                            tempNext = tempNext.getNext();
+
+                            temp.getData().setState(true);
+                            temp.getData().setDateOn(LocalTime.from(LocalDateTime.now()));
+                            tempNext.getData().setState(true);
+                            tempNext.getData().setDateOn(LocalTime.from(LocalDateTime.now()));
+
+
+                        }
+                    }
+                    pasos++;
+                    temp= temp.getNext();
+
+                }
+
             }
-            pasos ++;
-            temp = temp.getNext();
+
         }
+
     }
 }
