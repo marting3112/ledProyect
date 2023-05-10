@@ -11,6 +11,7 @@ import java.util.List;
 
 public class ListDE {
     private NodeDE head;
+    private NodeDE tail;
     private int size;
     private List<Led> leds = new ArrayList<>();
 
@@ -56,6 +57,95 @@ public class ListDE {
 
     }
 
+    public void addToStart(Led led)  {
+        NodeDE newNode = new NodeDE(led);
+        if (head != null) {
+            head.setPrev(newNode);
+            newNode.setNext(head);
+        }
+        head = newNode;
+        size++;
+    }
 
+    public void addToEnd(Led led) {
+        NodeDE newNode = new NodeDE(led);
+        if (head == null) {
+            head = newNode;
+            tail = newNode;
+        } else {
+            tail.setNext(newNode);
+            newNode.setPrev(tail);
+            tail = newNode;
+        }
+        size++;
+    }
 
+    public void turnOnLight() throws InterruptedException {
+        if (size % 2 == 0){
+            int medium = (size/2);
+            NodeDE temp = head;
+            int pasos = 1;
+
+            while (temp != null){
+                if (pasos == (medium + 1)){
+                    temp.getData().setState(true);
+                    temp.getData().setDateOn(LocalTime.from(LocalDateTime.now()));
+
+                    NodeDE temp2 = temp.getPrev();
+                    temp2.getData().setState(true);
+                    temp2.getData().setDateOn(LocalTime.from(LocalDateTime.now()));
+
+                    if (temp.getNext() != null){
+                        while (temp.getNext() != null){
+                            Thread.sleep(1000);
+                            temp.getData().setState(false);
+                            temp.getData().setDateOff(LocalTime.from(LocalDateTime.now()));
+
+                            temp2.getData().setState(false);
+                            temp2.getData().setDateOff(LocalTime.from(LocalDateTime.now()));
+
+                            temp = temp.getNext();
+                            temp.getData().setState(true);
+                            temp.getData().setDateOn(LocalTime.from(LocalDateTime.now()));
+
+                            temp2 = temp.getNext();
+                            temp2.getData().setState(true);
+                            temp2.getData().setDateOn(LocalTime.from(LocalDateTime.now()));
+                        }
+                    }
+                }
+                pasos ++;
+                temp = temp.getNext();
+            }
+        }else{
+            int medium = (size/2)+1;
+            NodeDE temp = head;
+            int pasos = 1;
+            while (temp != null){
+                if (pasos == medium){
+                    temp.getData().setState(true);
+                    temp.getData().setDateOn(LocalTime.from(LocalDateTime.now()));
+                    NodeDE temp2 = temp;
+                    if (temp.getNext() != null){
+                        Thread.sleep(1000);
+                        temp.getData().setState(false);
+                        temp.getData().setDateOff(LocalTime.from(LocalDateTime.now()));
+
+                        temp2.getData().setState(false);
+                        temp2.getData().setDateOff(LocalTime.from(LocalDateTime.now()));
+
+                        temp = temp.getNext();
+                        temp.getData().setState(true);
+                        temp.getData().setDateOn(LocalTime.from(LocalDateTime.now()));
+
+                        temp2 = temp.getNext();
+                        temp2.getData().setState(true);
+                        temp2.getData().setDateOn(LocalTime.from(LocalDateTime.now()));
+                    }
+                }
+            }
+            pasos ++;
+            temp = temp.getNext();
+        }
+    }
 }
